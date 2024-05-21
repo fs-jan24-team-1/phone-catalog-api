@@ -1,7 +1,7 @@
-import { Product } from '../types/Product';
-import { ProductItemType } from '../types/ProductItemType';
+// seed.js
+const { PrismaClient } = require('@prisma/client');
 
-export const products: Product[] = [
+const products = [
   {
     id: 1,
     category: 'phones',
@@ -2914,7 +2914,7 @@ export const products: Product[] = [
   },
 ];
 
-export const phones: ProductItemType[] = [
+const phones = [
   {
     id: 'apple-iphone-11-128gb-black',
     category: 'phones',
@@ -8841,7 +8841,7 @@ export const phones: ProductItemType[] = [
   },
 ];
 
-export const accessories: ProductItemType[] = [
+const accessories = [
   {
     id: 'apple-watch-series-3-38mm-space-gray',
     category: 'accessories',
@@ -10340,7 +10340,7 @@ export const accessories: ProductItemType[] = [
   },
 ];
 
-export const tablets: ProductItemType[] = [
+const tablets = [
   {
     id: 'apple-ipad-pro-11-2021-128gb-spacegray',
     category: 'tablets',
@@ -12043,4 +12043,38 @@ export const tablets: ProductItemType[] = [
   },
 ];
 
-const productInfo: ProductItemType[] = [...phones, ...tablets, ...accessories];
+const productInfos = [...phones, ...tablets, ...accessories];
+
+const prisma = new PrismaClient();
+
+async function main() {
+  // Clear existing data
+  await prisma.product.deleteMany();
+  await prisma.productInfo.deleteMany();
+
+  // Insert ProductInfo data first
+  for (const productInfo of productInfos) {
+    await prisma.productInfo.create({
+      data: productInfo,
+    });
+  }
+
+  // Insert Product data next
+  for (const product of products) {
+    await prisma.product.create({
+      data: product,
+    });
+  }
+
+  console.log('Database seeded!');
+}
+
+main()
+  .then(async () => {
+    await prisma.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });
