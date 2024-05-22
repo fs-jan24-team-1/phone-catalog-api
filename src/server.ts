@@ -7,6 +7,8 @@ const app = express();
 
 app.use(cors({ origin: '*' }));
 
+app.use(express.static('static'));
+
 app.use('/products', productRouter);
 
 app.listen(PORT, () => {

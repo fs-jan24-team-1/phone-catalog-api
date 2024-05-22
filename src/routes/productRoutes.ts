@@ -8,7 +8,4 @@ productRouter.get('/hot-prices', productController.getHotPricesProducts);
 productRouter.get('/', productController.getAllProducts);
 productRouter.get('/:id', productController.getOneProduct);
 productRouter.get('/category/:category', productController.getByCategory);
-productRouter.get(
-  '/products/:id/recommended',
-  productController.getRecommendedProducts,
-);
+productRouter.get('/:id/recommended', productController.getRecommendedProducts);
