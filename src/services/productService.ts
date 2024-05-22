@@ -18,8 +18,18 @@ export const productService = {
 
   getByCategory: async (
     category: string,
-    { sortBy = 'year', perPage = 4, page = 1 }: any,
+    { sortBy = 'year', perPage, page = 1 }: any,
   ) => {
+    const totalCount = await prisma.product.count({
+      where: {
+        category,
+      },
+    });
+
+    const itemsOnPage = perPage ? perPage : totalCount;
+
+    const totalPages = Math.ceil(totalCount / itemsOnPage) || 1;
+
     const products = await prisma.product.findMany({
       where: {
         category,
@@ -29,10 +39,10 @@ export const productService = {
         [sortBy]: 'asc',
       },
 
-      skip: +perPage * (+page - 1),
-      take: +perPage,
+      skip: +itemsOnPage * (+page - 1),
+      take: +itemsOnPage,
     });
-    return products;
+    return { products, totalCount, totalPages };
   },
 
   getRecommendedProducts: async (id: string) => {
