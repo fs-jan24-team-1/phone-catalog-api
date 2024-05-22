@@ -14,6 +14,12 @@ export const productController = {
     res.send(product);
   },
 
+  getByCategory: async (req: Request, res: Response) => {
+    const product = await productService.getByCategory(req.params.category, req.query);
+
+    res.send(product);
+  },
+
   getRecommendedProducts: async (req: Request, res: Response) => {
     const products = await productService.getRecommendedProducts(req.params.id);
 
@@ -27,7 +33,7 @@ export const productController = {
   },
 
   getHotPricesProducts: async (req: Request, res: Response) => {
-    const products = await productService.getHotPricesProducts();
+    const products = await productService.getNewestProducts();
 
     res.send(products);
   },

@@ -7,7 +7,7 @@ const app = express();
 
 app.use(cors({ origin: '*' }));
 
-app.use('/', productRouter);
+app.use('/products', productRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

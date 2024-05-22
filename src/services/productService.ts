@@ -16,6 +16,25 @@ export const productService = {
     return product;
   },
 
+  getByCategory: async (
+    category: string,
+    { sortBy = 'year', perPage = 4, page = 1 }: any,
+  ) => {
+    const products = await prisma.product.findMany({
+      where: {
+        category,
+      },
+
+      orderBy: {
+        [sortBy]: 'asc',
+      },
+
+      skip: +perPage * (+page - 1),
+      take: +perPage,
+    });
+    return products;
+  },
+
   getRecommendedProducts: async (id: string) => {
     const targetProduct = await prisma.productInfo.findUnique({
       where: {
