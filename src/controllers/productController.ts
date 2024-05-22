@@ -2,20 +2,33 @@ import { Request, Response } from 'express';
 import { productService } from '../services/productService';
 
 export const productController = {
+  getAllProducts: async (req: Request, res: Response) => {
+    const products = await productService.getAllProducts();
 
-  getAllProducts: (req: Request, res: Response) => {
-    res.send(productService.getAllProducts());
+    res.send(products);
   },
-  
-  getPhones: (req: Request, res: Response) => {
-    res.send(productService.getPhones());
+
+  getOneProduct: async (req: Request, res: Response) => {
+    const product = await productService.getProductById(req.params.id);
+
+    res.send(product);
   },
-  
-  getTablets: (req: Request, res: Response) => {
-    res.send(productService.getTablets());
+
+  getRecommendedProducts: async (req: Request, res: Response) => {
+    const products = await productService.getRecommendedProducts(req.params.id);
+
+    res.send(products);
   },
-  
-  getAccessories: (req: Request, res: Response) => {
-    res.send(productService.getAccessories());
+
+  getNewestProducts: async (req: Request, res: Response) => {
+    const products = await productService.getNewestProducts();
+
+    res.send(products);
+  },
+
+  getHotPricesProducts: async (req: Request, res: Response) => {
+    const products = await productService.getHotPricesProducts();
+
+    res.send(products);
   },
 };
