@@ -54,8 +54,8 @@ const activate = async (req: Request, res: Response) => {
   console.log(prisma, 'prisma');
 
   const { activationToken } = req.params;
-  const user = await prisma.user.findUnique({
-    where: { activationToken, id: 1 },
+  const user = await prisma.user.findFirst({
+    where: { activationToken },
   });
 
   if (!user) {
@@ -63,12 +63,12 @@ const activate = async (req: Request, res: Response) => {
     return;
   }
 
-  // await prisma.user.update({
-  //   where: { id: user.id },
-  //   data: { activationToken: null },
-  // });
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { activationToken: null },
+  });
 
-  // await sendAuthentication(res, user);
+  await sendAuthentication(res, user);
 };
 
 const login = async (req: Request, res: Response) => {
