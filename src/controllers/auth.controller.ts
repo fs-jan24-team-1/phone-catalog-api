@@ -7,7 +7,7 @@ import { userService } from '../services/user.service';
 import { jwtService } from '../services/jwt.service';
 import { ApiError } from '../exception/ApiError';
 import { tokenService } from '../services/token.service';
-import { User } from '@prisma/client';
+import type { User } from '@prisma/client';
 
 function validateEmail(value: string) {
   if (!value) {
