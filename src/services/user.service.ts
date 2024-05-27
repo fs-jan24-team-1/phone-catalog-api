@@ -1,36 +1,41 @@
-import { User } from "@prisma/client";
-import prisma from "../utils/db";
+import { User } from '@prisma/client';
+import prisma from '../utils/db';
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 
-import { ApiError } from "../exception/ApiError";
-import { emailService } from "./email.service";
+import { ApiError } from '../exception/ApiError';
+import { emailService } from './email.service';
 
 interface RegisterParams {
   email: string;
   password: string;
+  firstName: string;
+  lastName: string;
 }
 
 function getAllActivated() {
   return prisma.user.findMany({
     where: {
-      activationToken: null
+      activationToken: null,
     },
-    orderBy: {id: 'asc'}
-  })
+    orderBy: { id: 'asc' },
+  });
 }
 
 function normalize({ id, email }: User) {
-  return {id, email}
+  return { id, email };
 }
 
-function findByEmail (email: string) {
+function findByEmail(email: string) {
   return prisma.user.findUnique({ where: { email } });
 }
 
-async function register({ email, password }: RegisterParams
-
-) {
+async function register({
+  email,
+  password,
+  firstName,
+  lastName,
+}: RegisterParams) {
   const existingUser = await userService.findByEmail(email);
 
   if (existingUser) {
@@ -45,6 +50,8 @@ async function register({ email, password }: RegisterParams
   await prisma.user.create({
     data: {
       email,
+      firstName,
+      lastName,
       password: hash,
       activationToken,
     },
@@ -53,9 +60,9 @@ async function register({ email, password }: RegisterParams
   await emailService.sendActivationEmail({ email, activationToken });
 }
 
-  export const userService = {
-    getAllActivated,
-    normalize,
-    findByEmail,
-    register
-  };
+export const userService = {
+  getAllActivated,
+  normalize,
+  findByEmail,
+  register,
+};

@@ -6,8 +6,8 @@ import { authService } from '../services/auth.service';
 import { userService } from '../services/user.service';
 import { jwtService } from '../services/jwt.service';
 import { ApiError } from '../exception/ApiError';
-import { User } from '@prisma/client';
 import { tokenService } from '../services/token.service';
+import { User } from '@prisma/client';
 
 function validateEmail(value: string) {
   if (!value) {
@@ -32,27 +32,26 @@ function validatePassword(value: string) {
 }
 
 const register = async (req: Request, res: Response, next: NextFunction) => {
+  const { email, password, firstName, lastName } = req.body;
 
-  const { email, password } = req.body;
-  
   const errors = {
     email: validateEmail(email),
     password: validatePassword(password),
+  };
+
+  if (errors.email || errors.password) {
+    throw ApiError.BadRequest('Bad request', errors);
   }
 
-    if (errors.email || errors.password) {
-      throw ApiError.BadRequest('Bad request', errors);
-    }
+  await authService.register({ email, password, firstName, lastName });
 
-    await authService.register({ email, password });
-
-    res.send({ message: 'OK' });
+  res.send({ message: 'OK' });
 };
 
 const activate = async (req: Request, res: Response) => {
   const { activationToken } = req.params;
   const user = await prisma.user.findFirst({
-    where: { activationToken }
+    where: { activationToken },
   });
 
   if (!user) {
@@ -60,18 +59,15 @@ const activate = async (req: Request, res: Response) => {
     return;
   }
 
-  user.activationToken = null;
-
   await prisma.user.update({
     where: { id: user.id },
-    data: { activationToken: null }
+    data: { activationToken: null },
   });
 
   await sendAuthentication(res, user);
-}
+};
 
 const login = async (req: Request, res: Response) => {
-  
   const { email, password } = req.body;
 
   const user = await userService.findByEmail(email);
@@ -80,20 +76,13 @@ const login = async (req: Request, res: Response) => {
     throw ApiError.BadRequest('User with this email does not exist');
   }
 
-  if (user.password) {
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+  const isPasswordValid = await bcrypt.compare(password, user.password);
 
   if (!isPasswordValid) {
     throw ApiError.BadRequest('Password is wrong');
-    }
-    await sendAuthentication(res, user);
   }
 
-
-
-
-
-  
+  await sendAuthentication(res, user);
 };
 
 const refresh = async (req: Request, res: Response) => {
@@ -116,7 +105,7 @@ const refresh = async (req: Request, res: Response) => {
   }
 
   await sendAuthentication(res, user);
-}
+};
 
 async function logout(req: Request, res: Response, next: NextFunction) {
   const { refreshToken } = req.cookies;
