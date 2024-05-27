@@ -12045,6 +12045,27 @@ const tablets = [
 
 const productInfos = [...phones, ...tablets, ...accessories];
 
+const users = [
+  {
+    id: 1,
+    email: 'mcks@gmail.com',
+    password: '789A',
+    activationToken: 'vvdjvdijvids',
+  },
+  {
+    id: 2,
+    email: 'bbmcks@gmail.com',
+    password: '456B',
+    activationToken: 'aadjvdijvids',
+  },
+  {
+    id: 3,
+    email: 'abbmcks@gmvcail.com',
+    password: '123C',
+    activationToken: 'nndjvdijvids',
+  },
+]
+
 const prisma = new PrismaClient();
 
 async function main() {
@@ -12063,6 +12084,12 @@ async function main() {
   for (const product of products) {
     await prisma.product.create({
       data: product,
+    });
+  }
+
+  for (const user of users) {
+    await prisma.user.create({
+      data: user,
     });
   }
 

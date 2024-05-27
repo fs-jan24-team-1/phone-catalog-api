@@ -52,3 +52,21 @@ model Product {
   image     String
   quantity  Int
 }
+
+
+model User {
+  id             Int     @id @default(autoincrement())
+  firstName      String?
+  lastName       String?
+  email          String  @unique
+  password       String?
+  activationToken String?
+  token          Token?
+}
+
+model Token {
+  id           Int    @id @default(autoincrement())
+  refreshToken String
+  userId       Int    @unique
+  user         User   @relation(fields: [userId], references: [id])
+}
