@@ -1,5 +1,5 @@
 import express from 'express';
-import 'dotenv/config'
+import 'dotenv/config';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
@@ -12,23 +12,21 @@ const app = express();
 
 app.use(express.json());
 
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true
-}
-));
+app.use(
+  cors({
+    origin: 'https://fs-jan24-team-1.github.io/phone-catalog-fs24jan/',
+    credentials: true,
+  }),
+);
 
 app.use(cookieParser());
 
 app.use(express.static('static'));
 
 app.use('/products', productRouter);
-app.use(authRouter)
-app.use('/users', userRouter)
+app.use(authRouter);
+app.use('/users', userRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
-
-
-

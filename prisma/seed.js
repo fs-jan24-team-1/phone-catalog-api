@@ -12048,23 +12048,13 @@ const productInfos = [...phones, ...tablets, ...accessories];
 const users = [
   {
     id: 1,
+    firstName: 'Oleh',
+    lastName: 'Duma',
     email: 'mcks@gmail.com',
-    password: '789A',
+    password: '123456',
     activationToken: 'vvdjvdijvids',
   },
-  {
-    id: 2,
-    email: 'bbmcks@gmail.com',
-    password: '456B',
-    activationToken: 'aadjvdijvids',
-  },
-  {
-    id: 3,
-    email: 'abbmcks@gmvcail.com',
-    password: '123C',
-    activationToken: 'nndjvdijvids',
-  },
-]
+];
 
 const prisma = new PrismaClient();
 
@@ -12100,7 +12090,7 @@ main()
   .then(async () => {
     await prisma.$disconnect();
   })
-  .catch(async (e) => {
+  .catch(async e => {
     console.error(e);
     await prisma.$disconnect();
     process.exit(1);
