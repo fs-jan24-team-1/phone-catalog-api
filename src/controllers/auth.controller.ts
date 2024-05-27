@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import prisma from '../utils/db';
+// import prisma from '../utils/db';
 import bcrypt from 'bcrypt';
 
 import { authService } from '../services/auth.service';
@@ -7,7 +7,10 @@ import { userService } from '../services/user.service';
 import { jwtService } from '../services/jwt.service';
 import { ApiError } from '../exception/ApiError';
 import { tokenService } from '../services/token.service';
-import type { User } from '@prisma/client';
+// import type { User } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
+
 
 function validateEmail(value: string) {
   if (!value) {
@@ -120,7 +123,7 @@ async function logout(req: Request, res: Response, next: NextFunction) {
   res.sendStatus(204);
 }
 
-async function sendAuthentication(res: Response, user: User) {
+async function sendAuthentication(res: Response, user: any) {
   const userData = userService.normalize(user);
   const accessToken = jwtService.generateAccessToken(userData);
   const refreshToken = jwtService.generateRefreshToken(userData);
