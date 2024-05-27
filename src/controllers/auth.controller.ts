@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-// import prisma from '../utils/db';
+import prisma from '../utils/db';
 import bcrypt from 'bcrypt';
 
 import { authService } from '../services/auth.service';
@@ -8,9 +8,8 @@ import { jwtService } from '../services/jwt.service';
 import { ApiError } from '../exception/ApiError';
 import { tokenService } from '../services/token.service';
 // import type { User } from '@prisma/client';
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
-
+// import { PrismaClient } from '@prisma/client';
+// const prisma = new PrismaClient();
 
 function validateEmail(value: string) {
   if (!value) {
@@ -53,8 +52,8 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
 
 const activate = async (req: Request, res: Response) => {
   const { activationToken } = req.params;
-  const user = await prisma.user.findFirst({
-    where: { activationToken },
+  const user = await prisma.user.findUnique({
+    where: { activationToken, id: 1 },
   });
 
   if (!user) {
