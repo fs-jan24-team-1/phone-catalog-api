@@ -9,11 +9,13 @@ import { userService } from './user.service';
 interface RegisterParams {
   email: string;
   password: string;
+  firstName: string;
+  lastName: string;
 }
 
 export const authService = {
   
-  register: async ({ email, password }: RegisterParams) => {
+  register: async ({ email, password, firstName, lastName }: RegisterParams) => {
     const existingUser = await userService.findByEmail(email);
 
     if (existingUser) {
@@ -28,6 +30,8 @@ export const authService = {
     await prisma.user.create({
       data: {
         email,
+        firstName,
+        lastName,
         password: hash,
         activationToken,
       },
