@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "dev": "nodemon src/server.ts",
-    "start": "ts-node src/server.ts"
+    "start": "ts-node src/server.ts",
+    "prisma:generate": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^5.14.0",
