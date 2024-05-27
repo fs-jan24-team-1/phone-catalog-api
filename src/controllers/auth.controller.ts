@@ -61,10 +61,10 @@ const activate = async (req: Request, res: Response) => {
     return;
   }
 
-  await prisma.user.update({
-    where: { id: user.id },
-    data: { activationToken: null },
-  });
+  // await prisma.user.update({
+  //   where: { id: user.id },
+  //   data: { activationToken: null },
+  // });
 
   await sendAuthentication(res, user);
 };
